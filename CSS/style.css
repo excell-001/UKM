@@ -142,7 +142,7 @@ html, body {
 
 /* 3. Posisi Bunga Daisy (Tengah lembah bukit & lapisan paling depan) */
 .daisy {
-    bottom: 45%;
+    bottom: 50%;
     left: 52%;
     transform: translateX(-50%);
     width: clamp(85px, 10vw, 135px);
