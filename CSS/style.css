@@ -320,7 +320,7 @@ html, body {
     max-width: 780px;
     max-height: 88vh;
     overflow-y: auto;
-    background: rgba(255, 255, 255, 0.96); /* Warna putih bersih sesuai gambar pertama */
+    background: rgba(255, 255, 255, 0.96);
     border: 1px solid rgba(255, 255, 255, 0.9);
     color: #1e293b;
     border-radius: 24px;
@@ -514,19 +514,139 @@ html, body {
     color: #475569;
 }
 
-/* Responsif Layar HP */
-@media (max-width: 680px) {
+/* =========================================
+   RESPONSIF LAYAR HP / TABLET
+   ========================================= */
+@media (max-width: 768px) {
+    /* Navbar kapsul lebih ringkas agar 1 baris muat rapi */
+    .top-nav-wrapper {
+        top: 14px;
+        padding: 0 10px;
+    }
+
+    .pill-navbar {
+        gap: 14px;
+        padding: 9px 18px;
+    }
+
+    .pill-navbar a {
+        font-size: 10px;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+    }
+
+    /* Tinggi area utama disesuaikan dengan rasio layar HP vertikal */
+    .hero {
+        min-height: 125vh;
+        padding-top: 88px;
+    }
+
+    .main-title {
+        font-size: 26px;
+        letter-spacing: 1.2px;
+        line-height: 1.25;
+        padding: 0 16px;
+    }
+
+    /* Ukuran & posisi objek terbang di layar HP */
+    .paper-plane {
+        top: 195px;
+        left: 52%;
+        width: 115px;
+    }
+
+    .dove {
+        top: 36%;
+        left: 6%;
+        width: 145px;
+    }
+
+    /* Pohon di sisi kanan HP agar tidak menutupi seluruh layar */
+    .decor-tree {
+        right: -14%;
+        bottom: 135px;
+        width: 76vw;
+        max-width: 340px;
+    }
+
+    /* Bukit rumput diturunkan agar menyatu mulus dengan footer tanah di HP */
+    .decor-meadow {
+        bottom: -45px;
+        min-height: 190px;
+        max-height: 250px;
+        object-fit: cover;
+        object-position: top center;
+    }
+
+    /* Bunga daisy di tengah lembah bukit */
+    .daisy {
+        bottom: 65px;
+        left: 50%;
+        width: 72px;
+    }
+
+    /* Penyesuaian Footer Tanah & Rumput Merambat untuk layar HP */
+    .soil-footer {
+        background-position: center -45px;
+        background-size: auto calc(100% + 45px);
+        padding-top: 65px;
+        padding-bottom: 28px;
+    }
+
+    .creeping-grass {
+        top: -8px;
+        height: 75px;
+    }
+
+    .footer-content {
+        gap: 24px;
+        padding-top: 15px;
+    }
+
+    .footer-socials {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .social-item {
+        font-size: 13px;
+    }
+
+    .social-item i {
+        font-size: 22px;
+    }
+
+    .footer-copyright {
+        font-size: 11px;
+    }
+
+    .fly-up-btn {
+        position: static;
+        display: block;
+        margin: 20px auto 0 auto;
+        font-size: 12px;
+        padding: 8px 20px;
+    }
+
+    /* Modal Popup di layar HP */
     .modal-box {
-        padding: 32px 22px;
+        padding: 28px 20px;
+        max-height: 85vh;
+        border-radius: 20px;
     }
 
     .weekly-item {
         grid-template-columns: 1fr;
         gap: 6px;
+        padding: 16px 0;
+    }
+
+    .weekly-detail h3 {
+        font-size: 18px;
     }
 
     .monthly-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 14px;
     }
 }
