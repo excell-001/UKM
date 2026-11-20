@@ -578,11 +578,13 @@ html, body {
         object-position: top center;
     }
 
-    /* Bunga daisy di tengah lembah bukit */
+    /* Bunga daisy di tengah lembah bukit (layar HP) */
     .daisy {
-        bottom: 65px;
+        bottom: 95px; /* Naikkan angka ini jika bunga masih terlalu ke bawah, atau turunkan jika melayang */
         left: 50%;
-        width: 72px;
+        transform: translateX(-50%);
+        width: 68px;
+        z-index: 45;
     }
 
     /* Penyesuaian Footer Tanah & Rumput Merambat untuk layar HP */
