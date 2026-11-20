@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youth English Society</title>
+
+    <!-- Font & Icon -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="CSS/clouds.css">
+    <link rel="stylesheet" href="CSS/style.css">
+
+    <!-- GSAP -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js"></script>
+
+    <!-- Engine background awan -->
+    <script src="Js/clouds.js" defer></script>
+</head>
+<body>
+
+    <!-- Filter dan gradient SVG yang digunakan untuk membentuk awan -->
+    <svg width="0" height="0" style="position:absolute; visibility:hidden;" aria-hidden="true">
+        <defs>
+            <filter id="cumulus-fluff-heavy" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+                <feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="5" seed="14" result="noiseMain" />
+                <feDisplacementMap in="SourceGraphic" in2="noiseMain" scale="44" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                <feGaussianBlur in="displaced" stdDeviation="3.2" result="softened" />
+                <feTurbulence type="fractalNoise" baseFrequency="0.042" numOctaves="4" seed="29" result="fineWisps" />
+                <feDisplacementMap in="softened" in2="fineWisps" scale="13" xChannelSelector="B" yChannelSelector="R" result="finalCloud" />
+            </filter>
+            <filter id="cumulus-fluff-mid" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+                <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="4" seed="42" result="noiseMid" />
+                <feDisplacementMap in="SourceGraphic" in2="noiseMid" scale="34" xChannelSelector="R" yChannelSelector="G" result="displacedMid" />
+                <feGaussianBlur in="displacedMid" stdDeviation="4.5" result="finalMid" />
+            </filter>
+            <filter id="cirrus-wisp" x="-35%" y="-35%" width="170%" height="170%" color-interpolation-filters="sRGB">
+                <feTurbulence type="fractalNoise" baseFrequency="0.024 0.038" numOctaves="5" seed="77" result="wispNoise" />
+                <feDisplacementMap in="SourceGraphic" in2="wispNoise" scale="38" xChannelSelector="R" yChannelSelector="G" result="wispDisplaced" />
+                <feGaussianBlur in="wispDisplaced" stdDeviation="3.8" />
+            </filter>
+            <linearGradient id="cloud-grad-bright" x1="65%" y1="0%" x2="35%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98" />
+                <stop offset="52%" stop-color="#f7fbff" stop-opacity="0.95" />
+                <stop offset="82%" stop-color="#dce8f8" stop-opacity="0.90" />
+                <stop offset="100%" stop-color="#b9cde8" stop-opacity="0.82" />
+            </linearGradient>
+            <linearGradient id="cloud-grad-soft" x1="60%" y1="0%" x2="40%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.88" />
+                <stop offset="60%" stop-color="#eef5fd" stop-opacity="0.80" />
+                <stop offset="100%" stop-color="#c3d7f0" stop-opacity="0.65" />
+            </linearGradient>
+            <linearGradient id="cloud-grad-wisp" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72" />
+                <stop offset="100%" stop-color="#dfecfb" stop-opacity="0.28" />
+            </linearGradient>
+            <radialGradient id="cloud-shadow-core" cx="45%" cy="62%" r="55%">
+                <stop offset="0%" stop-color="#a8c1e3" stop-opacity="0.52" />
+                <stop offset="65%" stop-color="#c8daf0" stop-opacity="0.25" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="cloud-highlight-puff" cx="55%" cy="32%" r="50%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.96" />
+                <stop offset="65%" stop-color="#f4f9ff" stop-opacity="0.55" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+        </defs>
+    </svg>
+
+    <!-- Background langit dan awan -->
+    <div id="sky-viewport" aria-hidden="true">
+        <div id="sun-bloom"></div>
+        <div id="sun-core"></div>
+        <div id="cloud-stage"></div>
+        <div id="horizon-haze"></div>
+    </div>
+
+    <!-- Navbar Kapsul Transparan Atas (Terhubung ke Popup) -->
+    <header class="top-nav-wrapper">
+        <nav class="pill-navbar">
+            <a href="#where-it-began" data-popup="plane">WHERE IT BEGAN</a>
+            <a href="#our-little-world" data-popup="dove">OUR LITTLE WORLD</a>
+            <a href="#what-we-do" data-popup="daisy">WHAT WE DO</a>
+        </nav>
+    </header>
+
+    <!-- Area Utama Pemandangan -->
+    <main class="scene-wrapper">
+        <section class="hero">
+            <h1 class="main-title">YOUTH ENGLISH SOCIETY</h1>
+
+            <!-- Objek 1: Pesawat Kertas -->
+            <button class="object paper-plane" data-popup="plane" type="button" aria-label="Paper Plane">
+                <img src="assets/images/pesawat_kertas.png" alt="Paper Plane">
+            </button>
+
+            <!-- Objek 2: Burung Merpati -->
+            <button class="object dove" data-popup="dove" type="button" aria-label="Flying Dove">
+                <img src="assets/images/burung_merpati.png" alt="Flying Dove">
+            </button>
+
+            <!-- Objek 3: Bunga Daisy di Tengah Lembah -->
+            <button class="object daisy" data-popup="daisy" type="button" aria-label="Daisy Flower">
+                <img src="assets/images/bunga.png" alt="Daisy Flower">
+            </button>
+
+            <!-- Dekorasi Pohon Besar di Kanan -->
+            <img src="assets/images/pohon.png" alt="Big Tree" class="decor-tree">
+
+            <!-- Dekorasi Padang Rumput Bukit di Bagian Bawah -->
+            <img src="assets/images/rumput.png" alt="Green Meadow" class="decor-meadow">
+        </section>
+    </main>
+
+    <!-- =========================================
+         FOOTER TANAH + RUMPUT MERAMBAT
+         ========================================= -->
+    <footer class="soil-footer">
+        <!-- Lapisan Rumput Merambat di Atas Lapisan Tanah -->
+        <div class="creeping-grass"></div>
+
+        <div class="footer-content">
+            <!-- Baris Sosial Media & Spotify -->
+            <div class="footer-socials">
+                <a href="https://instagram.com/yesunikom" target="_blank" class="social-item">
+                    <i class="fa-brands fa-instagram"></i>
+                    <span>@YESUNIKOM</span>
+                </a>
+
+                <a href="https://tiktok.com/@yesunikom" target="_blank" class="social-item">
+                    <i class="fa-brands fa-tiktok"></i>
+                    <span>@YESUNIKOM</span>
+                </a>
+
+                <a href="#" target="_blank" class="social-item">
+                    <i class="fa-brands fa-spotify"></i>
+                    <span>HOLLY FRET</span>
+                </a>
+            </div>
+
+            <!-- Baris Copyright Bawah -->
+            <div class="footer-copyright">
+                @2026 YOUTH ENGLISH SOCIETY
+            </div>
+        </div>
+
+        <!-- Tombol FLY UP di Pojok Kanan Bawah -->
+        <button id="flyUpBtn" class="fly-up-btn" type="button">
+            FLY UP
+        </button>
+    </footer>
+
+    <!-- =========================================
+         MODAL POPUP INTERAKTIF (STYLE BIRU)
+         ========================================= -->
+    <div id="infoModal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-box">
+            <button id="closeModalBtn" class="modal-close" type="button" aria-label="Tutup Popup">×</button>
+            <div id="modalBody" class="modal-body">
+                <!-- Konten diisi otomatis oleh Js/main.js -->
+            </div>
+        </div>
+    </div>
+
+    <script src="Js/main.js"></script>
+    <script>
+        // Fungsi tombol FLY UP untuk kembali terbang ke atas
+        document.getElementById('flyUpBtn').addEventListener('click', function () {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

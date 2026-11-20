@@ -1,0 +1,172 @@
+/* =========================================
+   STYLING FOOTER TANAH
+   ========================================= */
+.soil-footer {
+    position: relative;
+    z-index: 10; /* Agar berada di depan background langit */
+    font-family: 'Inter', sans-serif;
+    
+    /* Mengambil langsung file tanah.png di dalam assets/images/ */
+    background-image: url('../assets/images/tanah.png'); 
+    background-repeat: repeat-x;
+    background-position: top center;
+    background-size: auto 100%;
+    
+    color: #ffffff;
+    padding-top: 130px; /* Jarak atas agar lengkungan tanah terlihat jelas */
+    margin-top: 40px;
+}
+
+.footer-overlay {
+    background: linear-gradient(
+        to bottom, 
+        rgba(20, 12, 8, 0.05) 0%, 
+        rgba(18, 10, 7, 0.72) 100%
+    );
+    padding: 20px 20px 30px 20px;
+}
+
+.footer-container {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+    gap: 40px;
+    padding-bottom: 45px;
+}
+
+/* Kolom Brand */
+.soil-footer .logo {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    color: #ffffff;
+}
+
+.soil-footer .logo i {
+    color: #87cefa;
+}
+
+.soil-footer .tagline {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #e6e1dd;
+    margin-bottom: 24px;
+    max-width: 260px;
+}
+
+.soil-footer .social-links {
+    display: flex;
+    gap: 12px;
+}
+
+.soil-footer .social-links a {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.88);
+    color: #2b1a12;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.soil-footer .social-links a:hover {
+    background-color: #ffffff;
+    transform: translateY(-3px);
+}
+
+/* Kolom Menu & Kontak */
+.soil-footer .footer-col h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 18px;
+    color: #ffffff;
+}
+
+.soil-footer .footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.soil-footer .footer-col ul li {
+    margin-bottom: 11px;
+    font-size: 14px;
+    color: #e6e1dd;
+}
+
+.soil-footer .footer-col ul li a {
+    color: #e6e1dd;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.soil-footer .footer-col ul li a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.soil-footer .contact-col ul li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+}
+
+.soil-footer .contact-col ul li i {
+    margin-top: 4px;
+    color: #d4cbc5;
+}
+
+/* Bagian Copyright Bawah */
+.soil-footer .footer-bottom {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding-top: 22px;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: #d4cbc5;
+}
+
+.soil-footer .legal-links {
+    display: flex;
+    gap: 12px;
+}
+
+.soil-footer .legal-links a {
+    color: #d4cbc5;
+    text-decoration: none;
+}
+
+.soil-footer .legal-links a:hover {
+    color: #ffffff;
+}
+
+/* Responsif Layar HP / Tablet */
+@media (max-width: 768px) {
+    .soil-footer {
+        padding-top: 100px;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .soil-footer .footer-bottom {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+}
