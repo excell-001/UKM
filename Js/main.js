@@ -1,72 +1,78 @@
-gsap.registerPlugin(ScrollTrigger);
+// =========================================
+// ANIMASI GSAP & SCROLLTRIGGER
+// =========================================
+if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
 
-// EFEK MELAYANG HALUS PADA GAMBAR (Tidak mengganggu ScrollTrigger)
-gsap.to(".paper-plane img", {
-    y: -12,
-    rotation: 2,
-    duration: 2,
-    repeat: -1,
-    yoyo: true,
-    ease: "sine.inOut"
-});
+    // Efek melayang halus pada gambar
+    gsap.to(".paper-plane img", {
+        y: -12,
+        rotation: 2,
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+    });
 
-gsap.to(".dove img", {
-    y: -14,
-    duration: 2.5,
-    repeat: -1,
-    yoyo: true,
-    ease: "sine.inOut"
-});
+    gsap.to(".dove img", {
+        y: -14,
+        duration: 2.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+    });
 
-// PESAWAT TERBANG KE KANAN SAAT DI-SCROLL
-gsap.to(".paper-plane", {
-    x: () => window.innerWidth * 0.8,
-    y: -150,
-    rotation: 20,
-    ease: "none",
-    scrollTrigger: {
-        trigger: ".hero",
-        start: "top top",
-        end: "center top", // Selesai terbang sebelum halaman habis di-scroll
-        scrub: 1
-    }
-});
+    // Pesawat terbang ke kanan saat di-scroll
+    gsap.to(".paper-plane", {
+        x: () => window.innerWidth * 0.8,
+        y: -150,
+        rotation: 20,
+        ease: "none",
+        scrollTrigger: {
+            trigger: ".hero",
+            start: "top top",
+            end: "center top",
+            scrub: 1,
+            invalidateOnRefresh: true
+        }
+    });
 
-// BURUNG MERPATI TERBANG KE KIRI SAAT DI-SCROLL
-gsap.to(".dove", {
-    x: () => -window.innerWidth * 0.6,
-    y: -120,
-    rotation: -10,
-    ease: "none",
-    scrollTrigger: {
-        trigger: ".hero",
-        start: "15% top", // Mulai terbang saat burung mulai terlihat di layar
-        end: "bottom top",
-        scrub: 1
-    }
-});
+    // Burung merpati terbang ke kiri saat di-scroll
+    gsap.to(".dove", {
+        x: () => -window.innerWidth * 0.6,
+        y: -120,
+        rotation: -10,
+        ease: "none",
+        scrollTrigger: {
+            trigger: ".hero",
+            start: "15% top",
+            end: "bottom top",
+            scrub: 1,
+            invalidateOnRefresh: true
+        }
+    });
 
-// BUNGA TERTIUP ANGIN
-gsap.to(".daisy img", {
-    rotation: 8,
-    transformOrigin: "bottom center",
-    duration: 1.5,
-    repeat: -1,
-    yoyo: true,
-    ease: "sine.inOut"
-});
+    // Bunga tertiup angin
+    gsap.to(".daisy img", {
+        rotation: 8,
+        transformOrigin: "bottom center",
+        duration: 1.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+    });
+}
 
 // =========================================
-// LOGIKA POPUP INTERAKTIF (TEMA BIRU)
+// LOGIKA POPUP INTERAKTIF
 // =========================================
 const popupData = {
-    // 1. Popup Pesawat Kertas / WHERE IT BEGAN
     plane: `
         <div class="modal-top-header">
             <img src="assets/images/pesawat_kertas.png" alt="Paper Plane">
             <span class="modal-kicker">WHERE IT BEGAN</span>
         </div>
-        
+
         <div class="weekly-list">
             <div class="weekly-item">
                 <div class="weekly-day">2007 — 2012</div>
@@ -82,24 +88,23 @@ const popupData = {
                 <div class="weekly-detail">
                     <h3>Satu-Satunya UKM Bahasa di UNIKOM</h3>
                     <p>UKM YES adalah satu-satunya UKM berbasis bahasa di UNIKOM. Kami berdiri dengan fondasi yang sangat kuat, yaitu Pancasila, rasa Kekeluargaan, dan tentu saja pedoman kampus kita tercinta, PIQIE (Professionalism, Integrity, Quality, Information Technology, and Excellence).</p>
-                    <span class="time-badge"><i class="fa-solid fa-award"></i> PIQIE & Kekeluargaan</span>
+                    <span class="time-badge"><i class="fa-solid fa-award"></i> PIQIE &amp; Kekeluargaan</span>
                 </div>
             </div>
         </div>
     `,
 
-    // 2. Popup Burung Merpati / OUR LITTLE WORLD
     dove: `
         <div class="modal-top-header">
             <img src="assets/images/burung_merpati.png" alt="Flying Dove">
             <span class="modal-kicker">OUR LITTLE WORLD</span>
         </div>
-        
+
         <div class="weekly-list">
             <div class="weekly-item">
                 <div class="weekly-day">3 Pilar<br>Utama</div>
                 <div class="weekly-detail">
-                    <h3>English Skills, Communication & Leadership</h3>
+                    <h3>English Skills, Communication &amp; Leadership</h3>
                     <p>Visi kami di sini sangat jelas. YES hadir sebagai wadah bagi mahasiswa UNIKOM untuk mengembangkan tiga pilar utama: English Skills, Communication, and Leadership. Setiap periode kepengurusan mempunyai visi misi yang berbeda.</p>
                     <span class="time-badge"><i class="fa-solid fa-dove"></i> Youth Empowerment</span>
                 </div>
@@ -116,20 +121,19 @@ const popupData = {
             <div class="weekly-item">
                 <div class="weekly-day">Tujuan<br>Kami</div>
                 <div class="weekly-detail">
-                    <h3>Berpikir Logis, Kritis & Sistematis</h3>
+                    <h3>Berpikir Logis, Kritis &amp; Sistematis</h3>
                     <p>Di era digital ini, kami ingin membentuk mahasiswa yang tidak hanya jago bicara, tapi juga mampu berpikir logis, kritis, dan sistematis. Untuk bisa mencapai tujuan itu, kita di sini mempunyai Core Activities atau kegiatan rutin yang wajib, aman, dan pastinya seru banget buat kalian ikuti.</p>
                 </div>
             </div>
         </div>
     `,
 
-    // 3. Popup Bunga Daisy / WHAT WE DO
     daisy: `
         <div class="modal-top-header">
             <img src="assets/images/bunga.png" alt="Daisy Flower">
-            <span class="modal-kicker">WHAT WE DO • KEGIATAN RUTIN (WEEKLY)</span>
+            <span class="modal-kicker">WHAT WE DO &bull; KEGIATAN RUTIN (WEEKLY)</span>
         </div>
-        
+
         <div class="weekly-list">
             <div class="weekly-item">
                 <div class="weekly-day">Kamis</div>
@@ -181,13 +185,12 @@ const popupData = {
 };
 
 const modal = document.getElementById("infoModal");
+const modalBox = modal ? modal.querySelector(".modal-box") : null;
 const closeModalBtn = document.getElementById("closeModalBtn");
 const modalBody = document.getElementById("modalBody");
-
-// Ambil semua elemen yang memiliki atribut data-popup (tombol objek maupun link navbar)
 const popupTriggers = document.querySelectorAll("[data-popup]");
 
-popupTriggers.forEach(trigger => {
+popupTriggers.forEach((trigger) => {
     trigger.addEventListener("click", (e) => {
         e.preventDefault();
         const key = trigger.getAttribute("data-popup");
@@ -195,18 +198,19 @@ popupTriggers.forEach(trigger => {
 
         if (htmlContent && modal && modalBody) {
             modalBody.innerHTML = htmlContent;
-            modal.scrollTop = 0;
+            if (modalBox) modalBox.scrollTop = 0;
             modal.classList.add("active");
             modal.setAttribute("aria-hidden", "false");
+            document.body.classList.add("modal-open");
         }
     });
 });
 
-// Fungsi menutup popup
 function closePopup() {
     if (modal) {
         modal.classList.remove("active");
         modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modal-open");
     }
 }
 
@@ -214,7 +218,6 @@ if (closeModalBtn) {
     closeModalBtn.addEventListener("click", closePopup);
 }
 
-// Tutup popup jika user klik area gelap di luar kotak modal
 if (modal) {
     modal.addEventListener("click", (e) => {
         if (e.target === modal) {
@@ -223,9 +226,19 @@ if (modal) {
     });
 }
 
-// Tutup popup dengan tombol ESC di keyboard
 document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && modal && modal.classList.contains("active")) {
         closePopup();
     }
 });
+
+// Tombol FLY UP untuk kembali ke atas
+const flyUpBtn = document.getElementById("flyUpBtn");
+if (flyUpBtn) {
+    flyUpBtn.addEventListener("click", () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+}
