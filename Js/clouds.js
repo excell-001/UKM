@@ -1,20 +1,21 @@
 /**
- * Pure Scroll-Driven Volumetric Cloud Parallax Engine (Optimized for Mobile & Desktop)
+ * High-Performance Scroll-Driven Cloud Parallax Engine
+ * Pre-renders SVG turbulence clouds into static GPU-friendly <canvas> textures once on load.
  */
 (function () {
   const stage = document.getElementById('cloud-stage');
   const sunBloom = document.getElementById('sun-bloom');
   const sunCore = document.getElementById('sun-core');
+  const defsSource = document.querySelector('svg defs');
 
   if (!stage) return;
 
   const isMobile = window.innerWidth <= 768;
+  const SVG_NS = 'http://www.w3.org/2000/svg';
 
   const cloudConfigs = [
-    // 1. High-altitude delicate wisp
     {
       id: 'wisp-upper-right',
-      type: 'wisp',
       width: '26vw',
       minWidth: 160,
       maxWidth: 420,
@@ -34,11 +35,8 @@
         { cx: 50, cy: 64, rx: 11, ry: 14, fill: 'url(#cloud-grad-wisp)' }
       ]
     },
-
-    // 2. Distant soft horizon cloud bank (left)
     {
       id: 'distant-left',
-      type: 'mid',
       width: '48vw',
       minWidth: 340,
       maxWidth: 760,
@@ -58,11 +56,8 @@
         { cx: 50, cy: 62, rx: 32, ry: 13, fill: 'url(#cloud-shadow-core)' }
       ]
     },
-
-    // 3. Hero Cumulus Cloud
     {
       id: 'hero-cumulus-main',
-      type: 'heavy',
       width: '68vw',
       minWidth: 260,
       maxWidth: 1080,
@@ -86,11 +81,8 @@
         { cx: 54, cy: 31, rx: 16, ry: 14, fill: 'url(#cloud-highlight-puff)' }
       ]
     },
-
-    // 4. Mid-ground drifting cumulus entering from the right
     {
       id: 'mid-right-drifter',
-      type: 'heavy',
       width: '56vw',
       minWidth: 230,
       maxWidth: 880,
@@ -111,11 +103,8 @@
         { cx: 60, cy: 46, rx: 18, ry: 15, fill: 'url(#cloud-grad-bright)' }
       ]
     },
-
-    // 5. Lower-left soft scatter cumulus
     {
       id: 'lower-left-scatter',
-      type: 'mid',
       width: '52vw',
       minWidth: 220,
       maxWidth: 820,
@@ -134,11 +123,8 @@
         { cx: 72, cy: 58, rx: 19, ry: 12, fill: 'url(#cloud-grad-soft)' }
       ]
     },
-
-    // 6. High-altitude upper-left gossamer veil
     {
       id: 'upper-left-veil',
-      type: 'wisp',
       width: '44vw',
       minWidth: 300,
       maxWidth: 680,
@@ -156,11 +142,8 @@
         { cx: 58, cy: 42, rx: 24, ry: 14, fill: 'url(#cloud-grad-wisp)' }
       ]
     },
-
-    // 7. Foreground large sweeping cumulus
     {
       id: 'foreground-sweeper',
-      type: 'heavy',
       width: '78vw',
       minWidth: 500,
       maxWidth: 1240,
@@ -179,11 +162,8 @@
         { cx: 64, cy: 46, rx: 21, ry: 16, fill: 'url(#cloud-grad-bright)' }
       ]
     },
-
-    // 8. Second wave upper-mid cumulus entering from the left
     {
       id: 'second-wave-left',
-      type: 'heavy',
       width: '60vw',
       minWidth: 400,
       maxWidth: 940,
@@ -203,28 +183,27 @@
     }
   ];
 
-  const activeConfigs = isMobile
-    ? cloudConfigs.filter((c) => c.mobileShow)
-    : cloudConfigs;
-
-  const SVG_NS = 'http://www.w3.org/2000/svg';
-  const cloudElements = [];
-
-  activeConfigs.forEach((cfg, index) => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'cloud-cluster';
-    wrapper.style.width = `clamp(${cfg.minWidth}px, ${cfg.width}, ${cfg.maxWidth}px)`;
-    wrapper.style.left = `${cfg.baseX}vw`;
-    wrapper.style.top = `${cfg.baseY}vh`;
-    wrapper.style.opacity = cfg.opacity;
-    wrapper.style.willChange = 'transform';
+  /**
+   * Render SVG filter 1x saja ke Canvas statis agar tidak makan CPU saat digerakkan
+   */
+  function createBakedCloudCanvas(cfg) {
+    const size = isMobile ? 280 : 480;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    canvas.className = 'cloud-canvas';
 
     const svg = document.createElementNS(SVG_NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 100 100');
-    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    svg.setAttribute('xmlns', SVG_NS);
+    svg.setAttribute('width', String(size));
+    svg.setAttribute('height', String(size));
+    svg.setAttribute('viewBox', '-35 -35 170 170');
+
+    if (defsSource) {
+      svg.appendChild(defsSource.cloneNode(true));
+    }
 
     const group = document.createElementNS(SVG_NS, 'g');
-    // Hanya pasang filter SVG berat di Desktop; di HP pakai bentuk lembut ringan
     if (!isMobile) {
       group.setAttribute('filter', cfg.filter);
     }
@@ -240,14 +219,47 @@
     });
 
     svg.appendChild(group);
-    wrapper.appendChild(svg);
+
+    const svgString = new XMLSerializer().serializeToString(svg);
+    const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+
+    const img = new Image();
+    img.onload = () => {
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.clearRect(0, 0, size, size);
+        ctx.drawImage(img, 0, 0, size, size);
+      }
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+
+    return canvas;
+  }
+
+  const activeConfigs = isMobile
+    ? cloudConfigs.filter((c) => c.mobileShow)
+    : cloudConfigs;
+
+  const cloudElements = [];
+
+  activeConfigs.forEach((cfg) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'cloud-cluster';
+    wrapper.style.width = `clamp(${cfg.minWidth}px, ${cfg.width}, ${cfg.maxWidth}px)`;
+    wrapper.style.left = `${cfg.baseX}vw`;
+    wrapper.style.top = `${cfg.baseY}vh`;
+    wrapper.style.opacity = cfg.opacity;
+
+    const canvas = createBakedCloudCanvas(cfg);
+    wrapper.appendChild(canvas);
     stage.appendChild(wrapper);
 
-    cloudElements.push({
-      el: wrapper,
-      cfg,
-      phaseOffset: index * 1.37
-    });
+    cloudElements.push({ el: wrapper, cfg });
   });
 
   let targetProgress = 0;
@@ -261,10 +273,7 @@
     viewportHeight = window.innerHeight;
   }
 
-  function renderFrame(timestamp) {
-    const diff = targetProgress - currentProgress;
-    currentProgress += diff * 0.08;
-
+  function applyTransforms() {
     if (sunBloom && sunCore && !isMobile) {
       const sunX = -currentProgress * viewportWidth * 0.06;
       const sunY = -currentProgress * viewportHeight * 0.04;
@@ -273,28 +282,29 @@
       sunCore.style.transform = `translate3d(${(sunX * 0.6).toFixed(1)}px, ${(sunY * 0.6).toFixed(1)}px, 0)`;
     }
 
-    const timeSec = (timestamp || 0) * 0.001;
-
     for (let i = 0; i < cloudElements.length; i++) {
-      const { el, cfg, phaseOffset } = cloudElements[i];
+      const { el, cfg } = cloudElements[i];
       const scrollDx = (cfg.travelX / 100) * viewportWidth * currentProgress;
       const scrollDy = (cfg.travelY / 100) * viewportHeight * currentProgress;
-
-      // Breeze halus hanya dijalankan di desktop agar HP 100% hemat CPU
-      const breezeX = isMobile ? 0 : Math.sin(timeSec * 0.22 + phaseOffset) * 8;
-      const breezeY = isMobile ? 0 : Math.cos(timeSec * 0.18 + phaseOffset) * 4;
-
       const scale = cfg.scaleStart + (cfg.scaleEnd - cfg.scaleStart) * currentProgress;
-      el.style.transform = `translate3d(${(scrollDx + breezeX).toFixed(1)}px, ${(scrollDy + breezeY).toFixed(1)}px, 0) scale(${scale.toFixed(3)})`;
-    }
 
-    // Di HP: hentikan loop animasi jika scroll sudah berhenti agar tidak menguras baterai/RAM
-    if (isMobile && Math.abs(diff) < 0.0005) {
+      el.style.transform = `translate3d(${scrollDx.toFixed(1)}px, ${scrollDy.toFixed(1)}px, 0) scale(${scale.toFixed(3)})`;
+    }
+  }
+
+  function renderFrame() {
+    const diff = targetProgress - currentProgress;
+    currentProgress += diff * 0.1;
+
+    // Otomatis berhenti saat scroll selesai (baik di Desktop maupun HP) -> 0% CPU saat idle
+    if (Math.abs(diff) < 0.0005) {
       currentProgress = targetProgress;
+      applyTransforms();
       isAnimating = false;
       return;
     }
 
+    applyTransforms();
     requestAnimationFrame(renderFrame);
   }
 
@@ -320,8 +330,10 @@
 
   window.addEventListener('load', () => {
     updateViewportMetrics();
-    computeScrollProgress();
+    const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const scrollTop = window.scrollY || window.pageYOffset || 0;
+    targetProgress = Math.min(1, Math.max(0, scrollTop / maxScroll));
     currentProgress = targetProgress;
-    renderFrame(0);
+    applyTransforms();
   });
 })();

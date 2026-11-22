@@ -9,22 +9,14 @@
 
 html, body {
     width: 100%;
-    height: auto !important;
     min-height: 100vh;
     overflow-x: hidden;
-    overflow-y: auto !important;
     font-family: 'Poppins', sans-serif;
     position: relative;
 }
 
-/* Memastikan langit terkunci di belakang dan tidak mendorong footer */
-#sky-viewport {
-    position: fixed !important;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 1 !important;
-    pointer-events: none;
+body.modal-open {
+    overflow: hidden;
 }
 
 /* =========================================
@@ -44,6 +36,8 @@ html, body {
 .pill-navbar {
     display: flex;
     align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 36px;
     padding: 12px 38px;
     border-radius: 999px;
@@ -77,19 +71,19 @@ html, body {
     width: 100%;
     z-index: 10;
     display: block;
+    overflow-x: clip; /* Mencegah scrollbar horizontal saat pesawat/merpati terbang keluar layar */
 }
 
 .hero {
     position: relative;
     width: 100%;
-    min-height: 190vh; /* Diperpanjang agar footer turun jauh ke paling bawah */
+    min-height: 190vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 130px;
 }
 
-/* Judul Utama Kuning */
 .main-title {
     position: relative;
     z-index: 25;
@@ -104,17 +98,19 @@ html, body {
 }
 
 /* Gaya Umum Tombol Objek Interaktif */
+/* Memakai properti `scale` terpisah agar tidak bentrok dengan `transform` GSAP dan translateX .daisy */
 .object {
     position: absolute;
     background: transparent;
     border: none;
     cursor: pointer;
     padding: 0;
-    transition: transform 0.3s ease, filter 0.3s ease;
+    scale: 1;
+    transition: scale 0.25s ease, filter 0.25s ease;
 }
 
 .object:hover {
-    transform: scale(1.06);
+    scale: 1.06;
     filter: drop-shadow(0 8px 16px rgba(255, 255, 255, 0.45));
 }
 
@@ -122,17 +118,19 @@ html, body {
     width: 100%;
     height: auto;
     display: block;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
-/* 1. Posisi Pesawat Kertas (Bebas dari CSS animation agar GSAP bekerja penuh) */
+/* 1. Posisi Pesawat Kertas */
 .paper-plane {
-    top: 400px;
+    top: 320px;
     left: 51%;
     width: clamp(130px, 15vw, 210px);
     z-index: 28;
 }
 
-/* 2. Posisi Burung Merpati (Bebas dari CSS animation agar GSAP bekerja penuh) */
+/* 2. Posisi Burung Merpati */
 .dove {
     top: 45%;
     left: 20%;
@@ -140,27 +138,28 @@ html, body {
     z-index: 28;
 }
 
-/* 3. Posisi Bunga Daisy (Tengah lembah bukit & lapisan paling depan) */
+/* 3. Posisi Bunga Daisy (Tengah lembah bukit) */
 .daisy {
-    bottom: 20%;
+    bottom: 11%;
     left: 52%;
     transform: translateX(-50%);
     width: clamp(85px, 10vw, 135px);
     z-index: 45;
 }
 
-/* 4. Posisi Pohon Besar (Menjulang di sisi kanan) */
+/* 4. Posisi Pohon Besar (Menyesuaikan tinggi bukit rumput secara proporsional) */
 .decor-tree {
     position: absolute;
-    right: 0%;
-    bottom: 600px;
-    width: clamp(360px, 46vw, 660px);
+    right: 0;
+    bottom: clamp(180px, 28vw, 520px);
+    width: clamp(240px, 44vw, 640px);
     height: auto;
-    z-index: 26; /* Di atas bukit (25) agar batang tidak tertutup */
+    z-index: 26;
     pointer-events: none;
+    user-select: none;
 }
 
-/* 5. Posisi Bukit Rumput (Diturunkan agar menyatu dengan tanah & rumput merambat) */
+/* 5. Posisi Bukit Rumput */
 .decor-meadow {
     position: absolute;
     bottom: -95px;
@@ -172,6 +171,7 @@ html, body {
     object-position: bottom center;
     z-index: 25;
     pointer-events: none;
+    user-select: none;
 }
 
 /* =========================================
@@ -194,7 +194,6 @@ html, body {
     padding-bottom: 36px;
 }
 
-/* Rumput Merambat menggantung tepat di tepi atas coklat tanah */
 .creeping-grass {
     position: absolute;
     top: -10px;
@@ -221,7 +220,6 @@ html, body {
     gap: 36px;
 }
 
-/* Baris Ikon Sosial Media */
 .footer-socials {
     width: 100%;
     display: flex;
@@ -253,7 +251,6 @@ html, body {
     transform: translateY(-3px);
 }
 
-/* Copyright Tengah Bawah */
 .footer-copyright {
     font-size: 13px;
     font-weight: 700;
@@ -263,7 +260,6 @@ html, body {
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
 }
 
-/* Tombol FLY UP Pojok Kanan Bawah */
 .fly-up-btn {
     position: absolute;
     right: 28px;
@@ -331,10 +327,10 @@ html, body {
     transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Custom Scrollbar Halus di Dalam Modal */
 .modal-box::-webkit-scrollbar {
     width: 6px;
 }
+
 .modal-box::-webkit-scrollbar-thumb {
     background: rgba(30, 41, 59, 0.2);
     border-radius: 999px;
@@ -357,6 +353,9 @@ html, body {
     line-height: 1;
     color: #334155;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: background 0.2s ease, transform 0.2s ease;
 }
 
@@ -365,7 +364,6 @@ html, body {
     transform: rotate(90deg);
 }
 
-/* Header Ikon Atas (Pesawat / Merpati / Bunga) */
 .modal-top-header {
     display: flex;
     flex-direction: column;
@@ -383,7 +381,6 @@ html, body {
     filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.12));
 }
 
-/* Label Pil Biru Lembut (WHERE IT BEGAN / WHAT WE DO) */
 .modal-kicker {
     display: inline-block;
     font-size: 11px;
@@ -396,7 +393,6 @@ html, body {
     border-radius: 999px;
 }
 
-/* Baris Konten / Jadwal Mingguan */
 .weekly-list {
     display: flex;
     flex-direction: column;
@@ -441,56 +437,52 @@ html, body {
     margin-bottom: 12px;
 }
 
-/* Badge Jam / Lokasi */
 .time-badge {
     display: inline-flex;
     align-items: center;
     gap: 7px;
     background: #eff6ff;
-    border: 1px solid #dbeafe;
-    padding: 5px 14px;
-    border-radius: 999px;
+    color: #2563eb;
     font-size: 12px;
     font-weight: 600;
-    color: #1d4ed8;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid #dbeafe;
 }
 
-/* Bagian Bawah: MONTHLY EVENTS */
+/* Bagian Monthly Events di Dalam Popup */
 .monthly-section {
-    margin-top: 28px;
+    margin-top: 24px;
 }
 
 .monthly-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    color: #2b7de9;
+    text-transform: uppercase;
 }
 
 .monthly-icon-box {
-    width: 34px;
-    height: 34px;
+    width: 30px;
+    height: 30px;
     border-radius: 10px;
     background: rgba(43, 125, 233, 0.12);
+    color: #2b7de9;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 15px;
-    color: #2b7de9;
-}
-
-.monthly-header span {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1.6px;
-    text-transform: uppercase;
-    color: #2b7de9;
+    font-size: 14px;
 }
 
 .monthly-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
 }
 
 .monthly-card {
@@ -498,6 +490,12 @@ html, body {
     border: 1px solid #e2e8f0;
     border-radius: 16px;
     padding: 18px 20px;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.monthly-card:hover {
+    transform: translateY(-2px);
+    border-color: #bfdbfe;
 }
 
 .monthly-card h4 {
@@ -515,173 +513,69 @@ html, body {
 }
 
 /* =========================================
-   RESPONSIF & OPTIMASI PERFORMA LAYAR HP
+   RESPONSIF LAYAR HP & TABLET
    ========================================= */
 @media (max-width: 768px) {
-    /* 1. Matikan filter SVG berat agar scrolling ringan di HP */
-    #cloud-stage,
-    #cloud-stage * {
-        filter: none !important;
-    }
-
-    /* 2. Navbar kapsul 1 baris sejajar */
-    .top-nav-wrapper {
-        top: 14px;
-        padding: 0 10px;
-    }
-
     .pill-navbar {
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        background: rgba(255, 255, 255, 0.35);
-        gap: 12px;
-        padding: 10px 16px;
-        width: auto;
-        max-width: 96vw;
+        gap: 14px;
+        padding: 10px 20px;
     }
 
     .pill-navbar a {
-        font-size: 9.5px;
-        letter-spacing: 0.4px;
-        white-space: nowrap;
+        font-size: 11px;
+        letter-spacing: 0.5px;
     }
 
-    /* 3. Tinggi Hero disesuaikan dengan layar HP */
     .hero {
-        min-height: 135vh;
-        padding-top: 86px;
+        min-height: 155vh;
+        padding-top: 110px;
     }
 
-    .main-title {
-        font-size: 26px;
-        letter-spacing: 1.2px;
-        line-height: 1.25;
-        padding: 0 16px;
-    }
-
-    /* 4. Posisi Pesawat & Merpati */
     .paper-plane {
-        top: 185px;
+        top: 240px;
         left: 52%;
-        width: 110px;
-        will-change: transform;
     }
 
     .dove {
-        top: 34%;
-        left: 6%;
-        width: 140px;
-        will-change: transform;
-    }
-
-    /* 5. POHON DITARUH DI PALING BAWAH DEKAT FOOTER */
-    .decor-tree {
-        right: -12%;
-        bottom: 15px;
-        width: 72vw;
-        max-width: 310px;
-        z-index: 26;
-    }
-
-    /* 6. Bukit Rumput & Bunga Daisy menyatu dengan Footer */
-    .decor-meadow {
-        bottom: -40px;
-        min-height: 180px;
-        max-height: 230px;
-        object-fit: cover;
-        object-position: top center;
+        top: 42%;
+        left: 10%;
     }
 
     .daisy {
-        bottom: 40px;
-        left: 46%;
-        transform: translateX(-50%);
-        width: 64px;
-        z-index: 45;
+        bottom: 7%;
     }
 
-    /* 7. Footer Tanah & Rumput Merambat */
-    .soil-footer {
-        background-position: center -40px;
-        background-size: auto calc(100% + 40px);
-        padding-top: 60px;
-        padding-bottom: 28px;
+    .decor-tree {
+        bottom: clamp(120px, 26vw, 240px);
     }
 
-    .creeping-grass {
-        top: -8px;
-        height: 70px;
-    }
-
-    .footer-content {
-        gap: 20px;
-        padding-top: 12px;
-    }
-
-    .footer-socials {
-        flex-direction: column;
-        gap: 14px;
-    }
-
-    .social-item {
-        font-size: 13px;
-    }
-
-    .social-item i {
-        font-size: 22px;
-    }
-
-    .footer-copyright {
-        font-size: 11px;
+    .decor-meadow {
+        bottom: -45px;
+        min-height: 220px;
     }
 
     .fly-up-btn {
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        background: rgba(38, 22, 17, 0.82);
         position: static;
         display: block;
-        margin: 18px auto 0 auto;
-        font-size: 12px;
-        padding: 8px 20px;
+        margin: 22px auto 0 auto;
     }
 
-    /* 8. Modal Popup 1 Kolom Penuh */
     .modal-overlay {
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        background: rgba(15, 25, 40, 0.78);
         padding: 16px;
     }
 
     .modal-box {
-        padding: 28px 20px;
-        max-height: 85vh;
+        padding: 28px 22px;
         border-radius: 20px;
     }
 
     .weekly-item {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 6px;
-        padding: 16px 0;
-    }
-
-    .weekly-day {
-        font-size: 13px;
-    }
-
-    .weekly-detail h3 {
-        font-size: 18px;
-    }
-
-    .weekly-detail p {
-        font-size: 13.5px;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 18px 0;
     }
 
     .monthly-grid {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 14px;
+        grid-template-columns: 1fr;
     }
 }

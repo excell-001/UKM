@@ -14,11 +14,12 @@
     <link rel="stylesheet" href="CSS/style.css">
 
     <!-- GSAP -->
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js" defer></script>
 
-    <!-- Engine background awan -->
+    <!-- Engine background awan & interaksi utama -->
     <script src="Js/clouds.js" defer></script>
+    <script src="Js/main.js" defer></script>
 </head>
 <body>
 
@@ -80,7 +81,7 @@
 
     <!-- Navbar Kapsul Transparan Atas (Terhubung ke Popup) -->
     <header class="top-nav-wrapper">
-        <nav class="pill-navbar">
+        <nav class="pill-navbar" aria-label="Navigasi Utama">
             <a href="#where-it-began" data-popup="plane">WHERE IT BEGAN</a>
             <a href="#our-little-world" data-popup="dove">OUR LITTLE WORLD</a>
             <a href="#what-we-do" data-popup="daisy">WHAT WE DO</a>
@@ -93,17 +94,17 @@
             <h1 class="main-title">YOUTH ENGLISH SOCIETY</h1>
 
             <!-- Objek 1: Pesawat Kertas -->
-            <button class="object paper-plane" data-popup="plane" type="button" aria-label="Paper Plane">
+            <button class="object paper-plane" data-popup="plane" type="button" aria-label="Where It Began - Paper Plane">
                 <img src="assets/images/pesawat_kertas.png" alt="Paper Plane">
             </button>
 
             <!-- Objek 2: Burung Merpati -->
-            <button class="object dove" data-popup="dove" type="button" aria-label="Flying Dove">
+            <button class="object dove" data-popup="dove" type="button" aria-label="Our Little World - Flying Dove">
                 <img src="assets/images/burung_merpati.png" alt="Flying Dove">
             </button>
 
             <!-- Objek 3: Bunga Daisy di Tengah Lembah -->
-            <button class="object daisy" data-popup="daisy" type="button" aria-label="Daisy Flower">
+            <button class="object daisy" data-popup="daisy" type="button" aria-label="What We Do - Daisy Flower">
                 <img src="assets/images/bunga.png" alt="Daisy Flower">
             </button>
 
@@ -115,65 +116,48 @@
         </section>
     </main>
 
-    <!-- =========================================
-         FOOTER TANAH + RUMPUT MERAMBAT
-         ========================================= -->
+    <!-- Footer Tanah + Rumput Merambat -->
     <footer class="soil-footer">
-        <!-- Lapisan Rumput Merambat di Atas Lapisan Tanah -->
-        <div class="creeping-grass"></div>
+        <div class="creeping-grass" aria-hidden="true"></div>
 
         <div class="footer-content">
-            <!-- Baris Sosial Media & Spotify -->
             <div class="footer-socials">
-                <a href="https://instagram.com/yesunikom" target="_blank" class="social-item">
+                <a href="https://instagram.com/yesunikom" target="_blank" rel="noopener noreferrer" class="social-item">
                     <i class="fa-brands fa-instagram"></i>
                     <span>@YESUNIKOM</span>
                 </a>
 
-                <a href="https://tiktok.com/@yesunikom" target="_blank" class="social-item">
+                <a href="https://tiktok.com/@yesunikom" target="_blank" rel="noopener noreferrer" class="social-item">
                     <i class="fa-brands fa-tiktok"></i>
                     <span>@YESUNIKOM</span>
                 </a>
 
-                <a href="#" target="_blank" class="social-item">
+                <!-- Ganti href dengan URL Spotify asli lalu tambahkan target="_blank" rel="noopener noreferrer" -->
+                <a href="#spotify" class="social-item">
                     <i class="fa-brands fa-spotify"></i>
                     <span>HOLLY FRET</span>
                 </a>
             </div>
 
-            <!-- Baris Copyright Bawah -->
             <div class="footer-copyright">
-                @2026 YOUTH ENGLISH SOCIETY
+                &copy; 2026 YOUTH ENGLISH SOCIETY
             </div>
         </div>
 
-        <!-- Tombol FLY UP di Pojok Kanan Bawah -->
         <button id="flyUpBtn" class="fly-up-btn" type="button">
             FLY UP
         </button>
     </footer>
 
-    <!-- =========================================
-         MODAL POPUP INTERAKTIF (STYLE BIRU)
-         ========================================= -->
-    <div id="infoModal" class="modal-overlay" aria-hidden="true">
+    <!-- Modal Popup Interaktif -->
+    <div id="infoModal" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Informasi Youth English Society" aria-hidden="true">
         <div class="modal-box">
-            <button id="closeModalBtn" class="modal-close" type="button" aria-label="Tutup Popup">×</button>
+            <button id="closeModalBtn" class="modal-close" type="button" aria-label="Tutup Popup">&times;</button>
             <div id="modalBody" class="modal-body">
                 <!-- Konten diisi otomatis oleh Js/main.js -->
             </div>
         </div>
     </div>
 
-    <script src="Js/main.js"></script>
-    <script>
-        // Fungsi tombol FLY UP untuk kembali terbang ke atas
-        document.getElementById('flyUpBtn').addEventListener('click', function () {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    </script>
 </body>
 </html>
